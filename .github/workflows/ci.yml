@@ -10,7 +10,7 @@ on:
 
 jobs:
   prevent-direct-push:
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push' && !contains(github.event.head_commit.message, 'Merge pull request')
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor != 'github-actions[bot]'
     runs-on: ubuntu-24.04
     steps:
       - name: Block Direct Push
