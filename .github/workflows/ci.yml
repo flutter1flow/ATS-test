@@ -21,7 +21,7 @@ jobs:
             echo "✅ Push to 'main' is allowed."
           fi
 
-  install-dependencies:
+  lint:
     needs: protect-main
     runs-on: ubuntu-24.04
     steps:
@@ -45,23 +45,11 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-  lint:
-    needs: install-dependencies
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 22
-
       - name: Run Code Quality Checks (ESLint & Prettier)
         run: npm run lint && npm run prettier:check
 
   type-check:
-    needs: install-dependencies
+    needs: protect-main
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout Code
@@ -71,12 +59,24 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 22
+
+      - name: Cache Node Modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-22-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-22
+          lookup-only: true
+
+      - name: Install Dependencies
+        run: npm ci
 
       - name: Run TypeScript Check
         run: npx tsc --noEmit
 
   tests:
-    needs: install-dependencies
+    needs: protect-main
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-24.04
     steps:
@@ -87,6 +87,18 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 22
+
+      - name: Cache Node Modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-22-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-22
+          lookup-only: true
+
+      - name: Install Dependencies
+        run: npm ci
 
       - name: Run Unit Tests & Generate Coverage
         run: npm run test -- --coverage
