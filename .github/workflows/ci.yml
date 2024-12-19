@@ -10,7 +10,6 @@ on:
 
 jobs:
   ci-pipeline:
-    needs: prevent-direct-push # Ensures this job runs only after `prevent-direct-push` passes
     runs-on: ubuntu-24.04
 
     steps:
