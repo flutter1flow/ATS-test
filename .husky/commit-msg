@@ -13,4 +13,3 @@ if ! echo "$commit_message" | grep -qE "^(feat|fix|docs|chore|style|refactor|tes
 fi
 
 echo "✅ Commit message format valid."
-sh .husky/commit-msg
