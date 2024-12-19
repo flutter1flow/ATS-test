@@ -1,5 +1,5 @@
 module.exports = {
 	'**/*.ts': ['eslint --fix', 'prettier --write'],
 	'**/*.{json,yml,js,cjs,mjs}': ['prettier --write'],
-	'**/*': ['npm test -- --passWithNoTests'],
+	'**/*.spec.ts': ['npm test'],
 };
