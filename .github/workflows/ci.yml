@@ -9,8 +9,10 @@ on:
       - main
 
 jobs:
-  prevent-direct-push:
+  ci-pipeline:
+    needs: prevent-direct-push # Ensures this job runs only after `prevent-direct-push` passes
     runs-on: ubuntu-24.04
+
     steps:
       - name: Validate Push to Main
         run: |
@@ -21,11 +23,6 @@ jobs:
             echo "✅ Push to 'main' is allowed."
           fi
 
-  ci-pipeline:
-    needs: prevent-direct-push # Ensures this job runs only after `prevent-direct-push` passes
-    runs-on: ubuntu-24.04
-
-    steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
