@@ -9,6 +9,15 @@ on:
       - main
 
 jobs:
+  prevent-direct-push:
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Block Direct Push
+        run: |
+          echo "Direct pushes to 'main' are not allowed. Use a Pull Request instead."
+          exit 1
+
   ci-pipeline:
     runs-on: ubuntu-24.04
     strategy:
