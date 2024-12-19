@@ -1,0 +1,31 @@
+name: CI for TypeScript Project
+
+on:
+    push:
+        branches:
+            - main   # Runs on push to main branch
+    pull_request:
+        branches:
+            - main   # Runs on pull request to main branch
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18  # Specify the Node.js version
+
+            - name: Install dependencies
+              run: npm ci  # Use `npm install` if `package-lock.json` doesn't exist
+
+            - name: Run tests
+              run: npm test
+
+            - name: Run TypeScript check
+              run: npx tsc --noEmit
