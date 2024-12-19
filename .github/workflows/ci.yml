@@ -9,10 +9,10 @@ on:
       - main
 
 jobs:
-  protect-main:
+  prevent-direct-push:
     runs-on: ubuntu-24.04
     steps:
-      - name: Validate Pushing Branch
+      - name: Validate Push to Main
         run: |
           if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/main" && "${{ github.event.head_commit.committer.name }}" != "GitHub" ]]; then
             echo "❌ Direct pushes to 'main' are not allowed. Use a Pull Request instead."
@@ -21,17 +21,13 @@ jobs:
             echo "✅ Push to 'main' is allowed."
           fi
 
-  install-dependencies:
-    needs: protect-main
+  ci-pipeline:
+    needs: prevent-direct-push # Ensures this job runs only after `prevent-direct-push` passes
     runs-on: ubuntu-24.04
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 22
 
       - name: Cache Node Modules
         uses: actions/cache@v3
@@ -40,61 +36,22 @@ jobs:
           key: ${{ runner.os }}-node-22-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-22
+          lookup-only: true # Ensures the cache is used for restore but not saved after the job
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
 
       - name: Install Dependencies
         run: npm ci
 
-      - name: Save Node Modules as Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: node_modules
-          path: node_modules
-
-  lint:
-    needs: install-dependencies
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Download Node Modules
-        uses: actions/download-artifact@v3
-        with:
-          name: node_modules
-          path: node_modules
-
       - name: Run Code Quality Checks (ESLint & Prettier)
         run: npm run lint && npm run prettier:check
-
-  type-check:
-    needs: install-dependencies
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Download Node Modules
-        uses: actions/download-artifact@v3
-        with:
-          name: node_modules
-          path: node_modules
 
       - name: Run TypeScript Check
         run: npx tsc --noEmit
 
-  tests:
-    needs: install-dependencies
-    if: ${{ github.event_name == 'push' }}
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Download Node Modules
-        uses: actions/download-artifact@v3
-        with:
-          name: node_modules
-          path: node_modules
-
       - name: Run Unit Tests & Generate Coverage
+        if: ${{ github.event_name == 'push' }}
         run: npm run test -- --coverage
