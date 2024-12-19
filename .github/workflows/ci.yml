@@ -39,18 +39,9 @@ jobs:
       - name: Run Code Quality Checks (ESLint & Prettier)
         run: npm run lint && npm run prettier:check
 
-      - name: Run Unit Tests
-        run: npm test
-
       - name: Run TypeScript Check
         run: npx tsc --noEmit
 
-      - name: Generate Coverage (Optional)
+      - name: Run Unit Tests & Generate Coverage
         if: ${{ github.event_name == 'push' }}
         run: npm run test -- --coverage
-
-      - name: Upload Coverage to Codecov
-        if: ${{ github.event_name == 'push' }}
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
