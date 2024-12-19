@@ -1,70 +1,55 @@
 name: CI/CD for TypeScript Project
 
 on:
-    push:
-        branches:
-            - '**'
-    pull_request:
-        branches:
-            - main
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - main
 
 jobs:
-    ci-pipeline:
-        runs-on: ubuntu-latest
-        strategy:
-            matrix:
-                node-version: [18, 20]  # Test on Node.js 18 and 20
+  ci-pipeline:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20]
 
-        steps:
-            - name: Checkout Code
-              uses: actions/checkout@v3
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-            - name: Cache Node Modules
-              uses: actions/cache@v3
-              with:
-                  path: ~/.npm
-                  key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node-${{ matrix.node-version }}
+      - name: Cache Node Modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-${{ matrix.node-version }}
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v3
-              with:
-                  node-version: ${{ matrix.node-version }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
 
-            - name: Install Dependencies
-              run: npm ci
+      - name: Install Dependencies
+        run: npm ci
 
-            - name: Run ESLint
-              run: npm run lint
+      - name: Run Code Quality Checks (ESLint & Prettier)
+        run: npm run lint && npm run prettier:check
 
-            - name: Run Prettier Check
-              run: npx prettier --check src
+      - name: Run Unit Tests
+        run: npm test
 
-            - name: Fix Code Style with Prettier
-              if: failure()
-              run: npx prettier --write src
+      - name: Run TypeScript Check
+        run: npx tsc --noEmit
 
-            - name: Run Unit Tests
-              run: npm test
+      - name: Generate Coverage (Optional)
+        if: ${{ github.event_name == 'push' }}
+        run: npm run test -- --coverage
 
-            - name: Run TypeScript Check
-              run: npx tsc --noEmit
-
-            - name: Build the Project
-              run: npm run build
-
-            - name: Generate Coverage Report
-              run: npm run test -- --coverage
-
-            - name: Upload Coverage to Codecov
-              uses: codecov/codecov-action@v3
-              with:
-                  token: ${{ secrets.CODECOV_TOKEN }}
-
-            - name: Upload Build Artifacts
-              if: always()
-              uses: actions/upload-artifact@v3
-              with:
-                  name: build-artifacts
-                  path: dist/
+      - name: Upload Coverage to Codecov
+        if: ${{ github.event_name == 'push' }}
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
