@@ -1,24 +1,28 @@
 {
-  "name": "ats-test",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "deploy": "wrangler deploy",
-    "dev": "wrangler dev",
-    "start": "wrangler dev",
-    "test": "vitest",
-    "cf-typegen": "wrangler types",
-    "build": "tsc"
-  },
-  "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.5.2",
-    "@cloudflare/workers-types": "^4.20241218.0",
-    "@eslint/js": "^9.17.0",
-    "eslint": "^9.17.0",
-    "globals": "^15.14.0",
-    "typescript": "^5.5.2",
-    "typescript-eslint": "^8.18.1",
-    "vitest": "2.1.8",
-    "wrangler": "^3.60.3"
-  }
+	"name": "ats-test",
+	"version": "0.0.0",
+	"private": true,
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"dev": "wrangler dev",
+		"start": "wrangler dev",
+		"test": "vitest",
+		"cf-typegen": "wrangler types",
+		"build": "tsc",
+		"prepare": "husky install"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "^0.5.2",
+		"@cloudflare/workers-types": "^4.20241218.0",
+		"@eslint/js": "^9.17.0",
+		"@vitest/coverage-v8": "^2.1.8",
+		"eslint": "^9.17.0",
+		"globals": "^15.14.0",
+		"husky": "^8.0.0",
+		"lint-staged": "^15.2.11",
+		"typescript": "^5.5.2",
+		"typescript-eslint": "^8.18.1",
+		"vitest": "2.1.8",
+		"wrangler": "^3.60.3"
+	}
 }
