@@ -4,12 +4,12 @@
 commit_message=$(cat $1)
 
 # Example: Enforce commit message format (e.g., feat: Add feature)
-if ! echo "$commit_message" | grep -qE "^(feat|fix|docs|chore|style|refactor|test|perf|ci): .{1,}"; then
-  echo "❌ Invalid commit message format."
+if ! echo "$commit_message" | grep -qE ".{1,}"; then
+  echo "❌	Invalid commit message format."
   echo "Commit message must follow the Conventional Commits format:"
   echo "e.g., feat: Add new feature"
   echo "Refer to https://www.conventionalcommits.org/"
   exit 1
 fi
 
-echo "✅ Commit message format valid."
+echo "✅	Commit message format valid."

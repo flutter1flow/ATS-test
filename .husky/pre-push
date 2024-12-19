@@ -3,9 +3,9 @@
 
 branch=$(git symbolic-ref --short HEAD)
 
-#if [ "$branch" = "main" ]; then
-#  echo "❌ Direct pushes to the 'main' branch are not allowed. Use a Pull Request instead."
-#  exit 1
-#fi
+if [ "$branch" = "main" ]; then
+  echo "❌	Direct pushes to the 'main' branch are not allowed. Use a Pull Request instead."
+  exit 1
+fi
 
-echo "✅ Push allowed for branch: $branch"
+echo "✅	Push allowed for branch: $branch"
