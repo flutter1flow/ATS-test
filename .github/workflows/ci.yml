@@ -23,9 +23,10 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-${{ matrix.node-version }}
+          lookup-only: true # Ensures the cache is used for restore but not saved after the job
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
