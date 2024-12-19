@@ -10,9 +10,15 @@ on:
 
 jobs:
   prevent-direct-push:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor != 'github-actions[bot]'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-24.04
     steps:
+      - name: Print Debugging Information
+        run: |
+          echo "GitHub Actor: ${{ github.actor }}"
+          echo "Event Name: ${{ github.event_name }}"
+          echo "Reference: ${{ github.ref }}"
+
       - name: Block Direct Push
         run: |
           echo "Direct pushes to 'main' are not allowed. Use a Pull Request instead."
