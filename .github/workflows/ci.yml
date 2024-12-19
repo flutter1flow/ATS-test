@@ -9,12 +9,13 @@ on:
       - main
 
 jobs:
-  ci-pipeline:
-    runs-on: ubuntu-latest
+  # Job 1: Checkout and Setup Node.js
+  setup:
+    name: Checkout and Setup Node.js
+    runs-on: ubuntu-24.04
     strategy:
       matrix:
         node-version: [18, 20, 22]
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -26,7 +27,24 @@ jobs:
           key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-${{ matrix.node-version }}
-          lookup-only: true # Ensures the cache is used for restore but not saved after the job
+          lookup-only: true # Ensures cache is only used for restore
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+  # Job 2: Install Dependencies
+  install-dependencies:
+    name: Install Dependencies
+    runs-on: ubuntu-24.04
+    needs: setup
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -36,12 +54,71 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Run Code Quality Checks (ESLint & Prettier)
+  # Job 3: Lint and Format Code
+  lint-and-format:
+    name: Lint and Format Code
+    runs-on: ubuntu-24.04
+    needs: install-dependencies
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run ESLint and Prettier
         run: npm run lint && npm run prettier:check
+
+  # Job 4: TypeScript Compilation Check
+  type-check:
+    name: Run TypeScript Compilation Check
+    runs-on: ubuntu-24.04
+    needs: install-dependencies
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: npm ci
 
       - name: Run TypeScript Check
         run: npx tsc --noEmit
 
-      - name: Run Unit Tests & Generate Coverage
-        if: ${{ github.event_name == 'push' }}
+  # Job 5: Unit Tests and Coverage
+  test:
+    name: Run Unit Tests and Coverage
+    runs-on: ubuntu-24.04
+    needs: install-dependencies
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Unit Tests with Coverage
         run: npm run test -- --coverage
