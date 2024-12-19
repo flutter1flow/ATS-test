@@ -9,6 +9,7 @@
 		"test": "vitest run",
 		"cf-typegen": "wrangler types",
 		"build": "tsc",
+		"lint": "eslint src --cache --fix",
 		"prepare": "husky install"
 	},
 	"devDependencies": {
