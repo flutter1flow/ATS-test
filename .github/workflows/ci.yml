@@ -39,7 +39,11 @@ jobs:
               run: npm run lint
 
             - name: Run Prettier Check
-              run: npx prettier --check .
+              run: npx prettier --check src
+
+            - name: Fix Code Style with Prettier
+              if: failure()
+              run: npx prettier --write src
 
             - name: Run Unit Tests
               run: npm test
