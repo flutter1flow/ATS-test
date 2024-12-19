@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  ci-pipeline:
+  Build-and-Validate:
     runs-on: ubuntu-24.04
 
     steps:
