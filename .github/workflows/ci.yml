@@ -9,74 +9,39 @@ on:
       - main
 
 jobs:
-  # Reusable Setup Job
-  setup:
-    name: Setup Environment
+  ci-pipeline:
     runs-on: ubuntu-24.04
-    outputs:
-      node_path: ${{ steps.node-path.outputs.cache-hit }}
+    strategy:
+      matrix:
+        node-version: [18, 20, 22]
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
       - name: Cache Node Modules
-        id: cache
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-22-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-22
+            ${{ runner.os }}-node-${{ matrix.node-version }}
+          lookup-only: true # Ensures the cache is used for restore but not saved after the job
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 22
-
-  # Install Dependencies
-  install:
-    name: Install Dependencies
-    runs-on: ubuntu-24.04
-    needs: setup
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+          node-version: ${{ matrix.node-version }}
 
       - name: Install Dependencies
         run: npm ci
 
-  # Lint and Format
-  lint-and-format:
-    name: Lint and Format Code
-    runs-on: ubuntu-24.04
-    needs: install
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Run ESLint and Prettier
+      - name: Run Code Quality Checks (ESLint & Prettier)
         run: npm run lint && npm run prettier:check
 
-  # TypeScript Check
-  type-check:
-    name: TypeScript Check
-    runs-on: ubuntu-24.04
-    needs: install
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Run TypeScript Compilation Check
+      - name: Run TypeScript Check
         run: npx tsc --noEmit
 
-  # Run Tests and Coverage
-  test:
-    name: Unit Tests and Coverage
-    runs-on: ubuntu-24.04
-    needs: install
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Run Unit Tests and Generate Coverage
+      - name: Run Unit Tests & Generate Coverage
+        if: ${{ github.event_name == 'push' }}
         run: npm run test -- --coverage
