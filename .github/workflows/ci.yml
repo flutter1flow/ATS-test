@@ -1,90 +1,66 @@
 name: CI/CD for TypeScript Project
 
 on:
-  push:
-    branches:
-      - '**' # Run on all branches
-  pull_request:
-    branches:
-      - main # Run for Pull Requests targeting main
+    push:
+        branches:
+            - '**'
+    pull_request:
+        branches:
+            - main
 
 jobs:
-#  prevent-direct-push:
-#    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Block Direct Push
-#        run: |
-#          echo "Direct pushes to 'main' are not allowed. Use a Pull Request instead."
-#          exit 1
+    ci-pipeline:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [18, 20]  # Test on Node.js 18 and 20
 
-  ci-pipeline:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16, 18, 20] # Test on multiple Node.js versions
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v3
 
-    steps:
-      # --------------------
-      # SETUP STAGE
-      # --------------------
-      - name: Checkout Code
-        uses: actions/checkout@v3
+            - name: Cache Node Modules
+              uses: actions/cache@v3
+              with:
+                  path: ~/.npm
+                  key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-${{ matrix.node-version }}
 
-      - name: Cache Node Modules
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-${{ matrix.node-version }}
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
+            - name: Install Dependencies
+              run: npm ci
 
-      - name: Install Dependencies
-        run: npm ci # Use npm install if package-lock.json is unavailable
+            - name: Run ESLint
+              run: npx eslint src
 
-      # --------------------
-      # LINTING STAGE
-      # --------------------
-      - name: Run ESLint
-        run: npx eslint src
+            - name: Run Prettier Check
+              run: npx prettier --check .
 
-      - name: Run Prettier Check
-        run: npx prettier --check .
+            - name: Run Unit Tests
+              run: npm test
 
-      # --------------------
-      # TESTING STAGE
-      # --------------------
-      - name: Run Unit Tests
-        run: npm test
+            - name: Run TypeScript Check
+              run: npx tsc --noEmit
 
-      - name: Run TypeScript Check
-        run: npx tsc --noEmit
+            - name: Build the Project
+              run: npm run build
 
-      # --------------------
-      # BUILD STAGE
-      # --------------------
-      - name: Build the Project
-        run: npm run build
+            - name: Generate Coverage Report
+              run: npm run test -- --coverage
 
-      # --------------------
-      # POST-TEST & REPORTING STAGE
-      # --------------------
-      - name: Generate Coverage Report
-        run: npm run test -- --coverage
+            - name: Upload Coverage to Codecov
+              uses: codecov/codecov-action@v3
+              with:
+                  token: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Upload Build Artifacts
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-artifacts
-          path: dist/
+            - name: Upload Build Artifacts
+              if: always()
+              uses: actions/upload-artifact@v3
+              with:
+                  name: build-artifacts
+                  path: dist/
