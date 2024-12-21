@@ -11,6 +11,12 @@ fi
 
 # Always run lint-staged.
 npx lint-staged
+echo "✅ Lint-staged passed."
+
+# Run TypeScript compilation check
+echo "🔍 Checking TypeScript compilation..."
+npx tsc --noEmit
+echo "✅ TypeScript compilation check passed."
 
 # Check if there are code files in the 'src' folder staged for commit.
 if git diff --cached --name-only | grep -q '^src/.*\.\(ts\|js\|tsx\|jsx\)$'; then
