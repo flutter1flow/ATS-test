@@ -1,13 +1,24 @@
 import { injectable, inject } from 'tsyringe';
 import { TelegramService } from '../services/telegramService';
 
+// Define the expected structure of the message
+interface TelegramMessage {
+	message: {
+		chat: {
+			id: number;
+		};
+		text: string;
+	};
+}
+
 @injectable()
 export class MessageHandler {
 	constructor(@inject(TelegramService) private telegramService: TelegramService) {}
 
 	async handleMessage(request: Request): Promise<Response> {
 		try {
-			const { message } = await request.json();
+			// Explicitly type the result of request.json()
+			const { message } = (await request.json()) as TelegramMessage;
 
 			if (!message || !message.chat || !message.text) {
 				return new Response('Invalid request: missing required message fields', { status: 400 });

@@ -12,6 +12,10 @@ fi
 # Always run lint-staged.
 npx lint-staged
 
+# Run TypeScript compilation check
+echo "🔍 Checking TypeScript compilation..."
+npx tsc --noEmit
+
 # Check if there are code files in the 'src' folder staged for commit.
 if git diff --cached --name-only | grep -q '^src/.*\.\(ts\|js\|tsx\|jsx\)$'; then
   echo "🧪 Running tests as code files in 'src' folder are part of the commit..."
