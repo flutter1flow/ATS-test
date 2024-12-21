@@ -13,7 +13,8 @@
 		"prepare": "husky install",
 		"prettier:check": "prettier --check 'src/**/*.{js,ts,json,css,md}'",
 		"prettier:fix": "prettier --write 'src/**/*.{js,ts,json,css,md}'",
-		"test-local": "node test-local.js"
+		"test-local": "node test-local.js",
+		"tsc": "npx tsc --noEmit"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.5.2",
