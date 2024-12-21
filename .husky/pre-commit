@@ -9,7 +9,7 @@ if [ "$branch" = "main" ]; then
   exit 1
 fi
 
-# Always run lint-staged
+# Always run lint-staged.
 npx lint-staged
 
 # Check if there are code files in the 'src' folder staged for commit.
