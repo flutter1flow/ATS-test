@@ -52,4 +52,4 @@ jobs:
 
       - name: Run Unit Tests & Generate Coverage
         if: ${{ github.event_name == 'push' }}
-        run: npm run test -- --coverage
+        run: npm run test
