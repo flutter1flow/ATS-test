@@ -9,5 +9,13 @@ if [ "$branch" = "main" ]; then
   exit 1
 fi
 
+# Always run lint-staged
 npx lint-staged
-npm test
+
+# Check if there are code files in the 'src' folder staged for commit
+if git diff --cached --name-only | grep -q '^src/.*\.\(ts\|js\|tsx\|jsx\)$'; then
+  echo "🧪 Running tests as code files in 'src' folder are part of the commit..."
+  npm test
+else
+  echo "✅ No code files in 'src' folder staged. Skipping tests."
+fi
