@@ -11,7 +11,7 @@ const LOCAL_URL = 'http://127.0.0.1:8787';
 const chatId = parseInt(process.env.CHAT_ID, 10) || 123456789;
 
 // Validate Environment Variables
-const requiredEnvVars = ['LOCAL_BOT_TOKEN'];
+const requiredEnvVars = ['TELEGRAM_BOT_TOKEN'];
 const missingVars = requiredEnvVars.filter((varName) => !process.env[varName]);
 if (missingVars.length) {
 	console.error(`Error: Missing required environment variables: ${missingVars.join(', ')}`);
