@@ -8,7 +8,7 @@ dotenv.config();
 
 // Constants
 const LOCAL_URL = 'http://127.0.0.1:8787';
-const chatId = process.env.CHAT_ID || 123456789;
+const chatId = parseInt(process.env.CHAT_ID, 10) || 123456789;
 
 // Validate Environment Variables
 const requiredEnvVars = ['LOCAL_BOT_TOKEN'];
@@ -36,14 +36,13 @@ function getMessageFromUser(prompt) {
 // Helper: Send Mock Update
 async function sendMockUpdate(message) {
 	const mockUpdate = {
-		update_id: 123456789,
 		message: {
-			chat: { id: chatId },
+			chat: { id: chatId }, // Ensure chatId is a valid number
 			text: message,
 		},
 	};
 
-	console.log('Sending request to local bot...');
+	// console.log('Mock Update:', JSON.stringify(mockUpdate, null, 2));
 	try {
 		const response = await fetch(LOCAL_URL, {
 			method: 'POST',
