@@ -12,7 +12,7 @@ fi
 # Always run lint-staged
 npx lint-staged
 
-# Check if there are code files in the 'src' folder staged for commit
+# Check if there are code files in the 'src' folder staged for commit.
 if git diff --cached --name-only | grep -q '^src/.*\.\(ts\|js\|tsx\|jsx\)$'; then
   echo "🧪 Running tests as code files in 'src' folder are part of the commit..."
   npm test
