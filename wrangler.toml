@@ -24,6 +24,7 @@ enabled = true
 # - https://developers.cloudflare.com/workers/configuration/secrets/
 [vars]
 TELEGRAM_BOT_TOKEN = "7241318250:AAF6OYmuniITN2DMEdRfmwtLyPz2WbHTjyE"
+WORKER_URL=https://ats-test.flutter1flow.workers.dev/
 
 # Bind the Workers AI model catalog. Run machine learning models, powered by serverless GPUs, on Cloudflare’s global network
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#workers-ai
