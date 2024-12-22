@@ -4,12 +4,14 @@ import { MessageHandler } from '../handlers/messageHandler';
 import { EnvConfig } from '../interfaces/envConfig';
 
 export const configureContainer = (env: EnvConfig): void => {
-	container.register(TelegramService, {
-		useFactory: () => new TelegramService(env.TELEGRAM_BOT_TOKEN),
-	});
+	registerEnvVariables(env);
+	container.registerInstance(TelegramService, new TelegramService(env.TELEGRAM_BOT_TOKEN));
+	container.registerSingleton(MessageHandler);
+};
 
-	container.register(MessageHandler, {
-		useClass: MessageHandler,
+const registerEnvVariables = (env: EnvConfig): void => {
+	Object.entries(env).forEach(([key, value]) => {
+		container.register(key, { useValue: value });
 	});
 };
 
