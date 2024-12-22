@@ -1,7 +1,7 @@
 import 'reflect-metadata';
-import { handleRequest } from '../handlers/request.handler';
-import { formatErrorResponse } from '../utils/error.handler';
-import { EnvConfigInterface } from '../interfaces/envConfig.interface';
+import { handleRequest } from './handlers/request.handler';
+import { formatErrorResponse } from './utils/error.handler';
+import { EnvConfigInterface } from './interfaces/envConfig.interface';
 
 /**
  * The entry point for handling incoming fetch events.
