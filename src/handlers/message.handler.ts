@@ -1,6 +1,6 @@
 import { injectable, inject } from 'tsyringe';
-import { TelegramService } from '../services/telegramService';
-import { TelegramRequest } from '../interfaces/telegram';
+import { TelegramService } from '../services/telegram.service';
+import { ITelegramRequest } from '../interfaces/telegram.interface';
 
 @injectable()
 export class MessageHandler {
@@ -39,11 +39,11 @@ export class MessageHandler {
 	 * @returns A parsed TelegramRequest object.
 	 * @throws An error if the JSON payload is invalid.
 	 */
-	private async parseRequest(request: Request): Promise<TelegramRequest> {
+	private async parseRequest(request: Request): Promise<ITelegramRequest> {
 		try {
 			const body = await request.json();
 			// console.log('Parsed Request Body:', JSON.stringify(body, null, 2));
-			return body as TelegramRequest;
+			return body as ITelegramRequest;
 		} catch (error) {
 			console.error('Error parsing request body:', error);
 			throw new Error('Invalid JSON payload');
@@ -55,7 +55,7 @@ export class MessageHandler {
 	 * @param telegramRequest - The TelegramRequest object to validate.
 	 * @returns True if the request is valid, otherwise false.
 	 */
-	private isValidTelegramMessage(telegramRequest: TelegramRequest): boolean {
+	private isValidTelegramMessage(telegramRequest: ITelegramRequest): boolean {
 		// console.log('Validating Telegram Request:', JSON.stringify(telegramRequest, null, 2));
 		if (!telegramRequest?.message?.chat?.id || typeof telegramRequest.message.chat.id !== 'number') {
 			console.error('Validation failed: chat.id is missing or invalid');
