@@ -168,6 +168,6 @@ dist
 
 # wrangler project
 
-.dev.vars.local
+.dev.vars
 .wrangler/
 .idea/

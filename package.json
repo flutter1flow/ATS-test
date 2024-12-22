@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"deploy": "node scripts/register-webhook.js & wrangler deploy",
-		"dev": "wrangler dev --env local",
+		"dev": "wrangler dev",
 		"test": "vitest run --coverage --passWithNoTests",
 		"cf-typegen": "wrangler types",
 		"build": "tsc",
