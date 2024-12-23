@@ -1,4 +1,4 @@
-import { injectable, inject } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 import { TelegramService } from '../services/telegram.service';
 import { ITelegramRequest } from '../interfaces/telegram.interface';
 
@@ -56,14 +56,13 @@ export class MessageHandler {
 	 * @returns True if the request is valid, otherwise false.
 	 */
 	private isValidTelegramMessage(telegramRequest: ITelegramRequest): boolean {
-		// console.log('Validating Telegram Request:', JSON.stringify(telegramRequest, null, 2));
-		if (!telegramRequest?.message?.chat?.id || typeof telegramRequest.message.chat.id !== 'number') {
-			console.error('Validation failed: chat.id is missing or invalid');
+		if (!telegramRequest?.message?.chat?.id) {
+			console.error('Validation failed: chat.id is missing');
 			return false;
 		}
 
-		if (!telegramRequest.message.text || typeof telegramRequest.message.text !== 'string') {
-			console.error('Validation failed: message.text is missing or invalid');
+		if (!telegramRequest.message.text) {
+			console.error('Validation failed: message.text is missing');
 			return false;
 		}
 

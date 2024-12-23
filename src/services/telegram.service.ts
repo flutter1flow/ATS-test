@@ -1,13 +1,10 @@
-import { injectable } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 
 @injectable()
 export class TelegramService {
-	private botApiUrl: string;
+	private readonly botApiUrl: string;
 
-	constructor(botToken: string) {
-		if (!botToken) {
-			throw new Error('Bot token is required.');
-		}
+	constructor(@inject('TELEGRAM_BOT_TOKEN') private botToken: string) {
 		this.botApiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 	}
 
