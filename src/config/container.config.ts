@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { container, DependencyContainer } from 'tsyringe';
-import { TEnv } from '../interfaces/env.type';
+import { TEnv } from '../types/env.type';
 
 export class ContainerConfig {
 	private static instance: ContainerConfig;

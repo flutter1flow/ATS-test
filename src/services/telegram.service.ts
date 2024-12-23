@@ -1,5 +1,5 @@
 import { inject, injectable } from 'tsyringe';
-import type { TEnv } from '../interfaces/env.type';
+import type { TEnv } from '../types/env.type';
 
 @injectable()
 export class TelegramService {

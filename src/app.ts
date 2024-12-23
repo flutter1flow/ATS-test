@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import type { TEnv } from './interfaces/env.type';
+import type { TEnv } from './types/env.type';
 import { ContainerConfig, resolve } from './config/container.config';
 import { RequestHandler } from './handlers/request.handler';
 import { formatErrorResponse } from './utils/error.util';
