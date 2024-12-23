@@ -9,4 +9,9 @@ export default {
 		ContainerConfig.initialize(env);
 		return await resolve(RequestHandler).handleRequest(request).catch(formatErrorResponse);
 	},
+
+	async scheduled(event: ScheduledEvent, env: TEnv): Promise<void> {
+		ContainerConfig.initialize(env);
+		// Do something
+	},
 };
