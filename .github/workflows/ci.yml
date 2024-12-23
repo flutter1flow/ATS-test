@@ -20,13 +20,16 @@ jobs:
           exit 1
 
       - name: Validate Pull Request
-        if: ${{ github.event_name == 'pull_request' && github.base_ref == 'main' }}
+        if: ${{ github.event_name == 'pull_request' }}
         run: |
-          if [[ "${{ github.event.pull_request.head.ref }}" != "dev" ]]; then
+          if [[ "${{ github.base_ref }}" == "main" && "${{ github.event.pull_request.head.ref }}" != "dev" ]]; then
             echo "❌ Pull requests to 'main' are only allowed from the 'dev' branch."
             exit 1
+          elif [[ "${{ github.base_ref }}" == "dev" && "${{ github.event.pull_request.head.ref }}" == "main" ]]; then
+            echo "❌ Pull requests to 'dev' cannot come from 'main'."
+            exit 1
           else
-            echo "✅ Pull request to 'main' from 'dev' is allowed."
+            echo "✅ Pull request validation passed."
           fi
 
       - name: Checkout Code
