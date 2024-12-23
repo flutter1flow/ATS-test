@@ -4,8 +4,8 @@
 # Check if the current branch is 'main'
 branch=$(git symbolic-ref --short HEAD)
 
-if [ "$branch" = "main" ]; then
-  echo "❌	Direct commits to the 'main' branch are not allowed. Please switch to a feature branch."
+if [ "$branch" = "main" ] || [ "$branch" = "dev" ]; then
+  echo "❌ Direct commits to the '$branch' branch are not allowed. Please switch to a feature branch."
   exit 1
 fi
 
