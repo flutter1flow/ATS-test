@@ -5,9 +5,10 @@
 	"type": "module",
 	"scripts": {
 		"deploy": "node scripts/register-webhook.js & wrangler deploy",
-		"dev": "wrangler dev",
+		"dev": "wrangler types & wrangler dev",
 		"test": "vitest run --coverage --passWithNoTests",
 		"cf-typegen": "wrangler types",
+		"postbuild": "wrangler types",
 		"build": "tsc",
 		"lint": "eslint src --cache --fix",
 		"prepare": "husky install",

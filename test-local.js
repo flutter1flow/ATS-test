@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import readline from 'readline';
 
 // Load environment variables
-dotenv.config();
+dotenv.config({ path: './.dev.vars' });
 
 // Constants
 const LOCAL_URL = 'http://127.0.0.1:8787';

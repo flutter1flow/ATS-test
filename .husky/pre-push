@@ -1,10 +1,8 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-branch=$(git symbolic-ref --short HEAD)
-
-if [ "$branch" = "main" ]; then
-  echo "❌	Direct pushes to the 'main' branch are not allowed. Use a Pull Request instead."
+if [ "$branch" = "main" ] || [ "$branch" = "dev" ]; then
+  echo "❌ Direct pushes to the '$branch' branch are not allowed. Use a Pull Request instead."
   exit 1
 fi
 
