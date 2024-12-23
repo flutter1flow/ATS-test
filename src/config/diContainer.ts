@@ -1,11 +1,11 @@
 import { container } from 'tsyringe';
 import { TelegramService } from '../services/telegram.service';
 import { MessageHandler } from '../handlers/message.handler';
-import { IEnvConfig } from '../interfaces/IEnvConfig';
+import { EnvInterface } from '../interfaces/env.interface';
 import { CacheService } from '../services/cache.service';
 import { KVRepository } from '../repositories/kv.repository';
 
-export const configureContainer = (env: IEnvConfig): void => {
+export const configureContainer = (env: EnvInterface): void => {
 	registerEnvVariables(env);
 	container.registerSingleton(KVRepository);
 	container.registerSingleton(CacheService);
@@ -13,7 +13,7 @@ export const configureContainer = (env: IEnvConfig): void => {
 	container.registerSingleton(MessageHandler);
 };
 
-const registerEnvVariables = (env: IEnvConfig): void => {
+const registerEnvVariables = (env: EnvInterface): void => {
 	Object.entries(env).forEach(([key, value]) => {
 		container.register(key, { useValue: value });
 	});

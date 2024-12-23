@@ -1,3 +1,3 @@
 import './worker-configuration';
 
-export type IEnvConfig = Env;
+export type EnvInterface = Env;

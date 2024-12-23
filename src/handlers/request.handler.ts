@@ -1,6 +1,6 @@
 import { configureContainer, container } from '../config/diContainer';
 import { MessageHandler } from './message.handler';
-import { IEnvConfig } from '../interfaces/IEnvConfig';
+import { EnvInterface } from '../interfaces/env.interface';
 
 /**
  * Handles incoming HTTP requests by configuring the DI container and delegating POST requests to the MessageHandler.
@@ -10,7 +10,7 @@ import { IEnvConfig } from '../interfaces/IEnvConfig';
  * @param env - Environment variables conforming to the EnvConfig interface.
  * @returns A Response indicating the result of the request handling.
  */
-export const handleRequest = async (request: Request, env: IEnvConfig): Promise<Response> => {
+export const handleRequest = async (request: Request, env: EnvInterface): Promise<Response> => {
 	// Configure the dependency injection container with the provided environment variables
 	configureContainer(env);
 
