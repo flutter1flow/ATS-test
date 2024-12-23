@@ -1,4 +1,3 @@
-export interface IEnvConfig {
-	TELEGRAM_BOT_TOKEN: string;
-	KV_NAMESPACE: KVNamespace;
-}
+import './worker-configuration';
+
+export type IEnvConfig = Env;
