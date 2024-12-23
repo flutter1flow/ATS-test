@@ -1,4 +1,4 @@
-import { configureContainer, container } from '../config/diContainer';
+import { configureContainer, container } from '../config/container.config';
 import { MessageHandler } from './message.handler';
 import { EnvInterface } from '../interfaces/env.interface';
 

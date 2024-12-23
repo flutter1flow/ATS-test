@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { handleRequest } from './handlers/request.handler';
-import { formatErrorResponse } from './utils/error.handler';
+import { formatErrorResponse } from './utils/error.util';
 import { EnvInterface } from './interfaces/env.interface';
 
 /**
