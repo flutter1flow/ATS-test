@@ -1,5 +1,3 @@
-# ci
-
 name: CI/CD for TypeScript Project
 
 on:
@@ -15,13 +13,20 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - name: Validate Push to Main
+      - name: Validate Push to main/dev
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
         run: |
-          if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == "refs/heads/main" && "${{ github.event.head_commit.committer.name }}" != "GitHub" ]]; then
-            echo "❌ Direct pushes to 'main' are not allowed. Use a Pull Request instead."
+          echo "❌ Direct pushes to 'main' or 'dev' are not allowed. Use a Pull Request workflow instead."
+          exit 1
+
+      - name: Validate Pull Request
+        if: ${{ github.event_name == 'pull_request' && github.base_ref == 'main' }}
+        run: |
+          if [[ "${{ github.event.pull_request.head.ref }}" != "dev" ]]; then
+            echo "❌ Pull requests to 'main' are only allowed from the 'dev' branch."
             exit 1
           else
-            echo "✅ Push to 'main' is allowed."
+            echo "✅ Pull request to 'main' from 'dev' is allowed."
           fi
 
       - name: Checkout Code
@@ -34,7 +39,7 @@ jobs:
           key: ${{ runner.os }}-node-22-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-22
-          lookup-only: true # Ensures the cache is used for restore but not saved after the job
+          lookup-only: true
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
