@@ -1,4 +1,3 @@
-// src/config/app.config.ts
 import 'reflect-metadata';
 import { container, DependencyContainer } from 'tsyringe';
 import { TEnv } from '../interfaces/env.type';
