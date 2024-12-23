@@ -15,16 +15,6 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - name: test
-        if: ${{ github.event_name == 'push' || github.event_name == 'pull_request' }}
-        run: |
-          echo "github.event.pull_request.base.ref: ${{ github.event.pull_request.base.ref }}"
-          echo "github.event.pull_request.head.ref: ${{ github.event.pull_request.head.ref }}"
-          echo "github.base_ref: ${{ github.base_ref }}"
-          echo "github.head_ref: ${{ github.head_ref }}"
-          echo "github.event_name: ${{ github.event_name }}"
-          echo "github.ref: ${{ github.ref }}"
-
       - name: Validate Push to main/dev
         if: ${{ github.event_name == 'push' && github.base_ref == 'refs/heads/main' }}
         run: |
