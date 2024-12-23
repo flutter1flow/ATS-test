@@ -14,8 +14,9 @@
 		"prepare": "husky install",
 		"prettier:check": "prettier --check 'src/**/*.{js,ts,json,css,md}'",
 		"prettier:fix": "prettier --write 'src/**/*.{js,ts,json,css,md}'",
-		"test-local": "node test-local.js",
-		"tsc": "npx tsc --noEmit"
+		"test:cli": "node test.cli.js",
+		"tsc": "npx tsc --noEmit",
+		"test-local": "echo The command for testing the bot locally was changed to: 'npm run test:cli'"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.5.2",

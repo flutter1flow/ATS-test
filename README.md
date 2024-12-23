@@ -1,6 +1,7 @@
 # ATS-test Project
 
-ATS-test is a Cloudflare Worker-based project for managing scheduling and availability time slots. It integrates with a Telegram bot for user interaction and leverages TypeScript for modular, scalable development.
+ATS-test is a Cloudflare Worker-based project for managing scheduling and availability time slots. It integrates with a
+Telegram bot for user interaction and leverages TypeScript for modular, scalable development.
 
 ---
 
@@ -30,13 +31,28 @@ ATS-test is a Cloudflare Worker-based project for managing scheduling and availa
    npm install
    ```
 3. Configure environment variables:
-	- Open the `.env` file and update the values as needed:
-	  ```env
-	  BOT_TOKEN=<your-telegram-bot-token>
+	- Create a `.dev.vars` file in the root directory.
+	- Add environment variables to the file
+	- Overwrite the environment variables in `wrangler.toml`
+	- The interface of the environment variables in `worker-configuration.d.ts`
+	- Example of the `.dev.vars` file:
+	  ```.dev.vars
+      KV_NAMESPACE=<your-test-kv-namespace>           // KV namespace for caching
+      WORKER_URL=<your-worker-url>                    // URL of the Cloudflare Worker (for registering webhooks)
+      TELEGRAM_BOT_TOKEN=<your-telegram-bot-token>    // telegram bot token
+      CHAT_ID=<your-telegram-chat-id>                 // telegram chat id (user id for local testing)
+      DB=<your-d1-database-binding>                   // D1 database binding for data storage
+      NODE_ENV=local                                  // environment mode (development, production)
 	  ```
 4. Test the project locally:
+
+- Open first terminal and run:
    ```bash
    npm run dev
+   ```
+- Open second terminal and run:
+   ```bash
+   npm run test:cli
    ```
 
 ---
@@ -83,7 +99,7 @@ ATS-test is a Cloudflare Worker-based project for managing scheduling and availa
 
 ### Step 4: Open a Merge Request
 
-1. Go to the GitHub repository and open a new pull/merge request from your side branch to `main`.
+1. Go to the GitHub repository and open a new pull/merge request from your side branch to `dev`.
 2. Ensure your pull request includes:
 	- A clear description of the feature or fix.
 	- Evidence of passing tests.
@@ -92,7 +108,7 @@ ATS-test is a Cloudflare Worker-based project for managing scheduling and availa
 
 1. Wait for reviews from team members.
 2. Address any requested changes and re-push if necessary.
-3. Once approved, merge the branch into `main`.
+3. Once approved, merge the branch into `dev`.
 
 ---
 
@@ -135,16 +151,19 @@ ATS-test is a Cloudflare Worker-based project for managing scheduling and availa
 
 ### Project Structure
 
-- **`src/index.ts`**: Main entry point of the Cloudflare Worker.
-- **`test/index.spec.ts`**: Unit tests for the worker.
+- **`src/app.ts`**: Main entry point of the Cloudflare Worker.
+- **`test/`**: Unit tests for the worker.
 - **`wrangler.toml`**: Configuration for the Cloudflare Worker, including environment variables and bindings.
 - **`package.json`**: Contains metadata, dependencies, and scripts.
 
 ### Environment Variables
 
-- **`BOT_TOKEN`**: Token for the Telegram bot.
+- **`TELEGRAM_BOT_TOKEN`**: Token for the Telegram bot.
 - **`DB`**: D1 database binding for data storage.
-- **`TEST_KV_AVAILABILITY_BOT`**: KV namespace for caching.
+- **`KV_NAMESPACE`**: KV namespace for caching.
+- **`WORKER_URL`**: URL of the Cloudflare Worker (for registering webhooks).
+- **`CHAT_ID`**: Telegram chat ID (user ID for local testing).
+- **`NODE_ENV`**: Environment mode (local, production).
 
 ---
 
