@@ -1,20 +1,12 @@
 import 'reflect-metadata';
-import { handleRequest } from './handlers/request.handler';
+import type { TEnv } from './interfaces/env.type';
+import { ContainerConfig, resolve } from './config/container.config';
+import { RequestHandler } from './handlers/request.handler';
 import { formatErrorResponse } from './utils/error.util';
-import { EnvInterface } from './interfaces/env.interface';
 
-/**
- * The entry point for handling incoming fetch events.
- * Delegates the request to the appropriate handler and ensures consistent error handling.
- */
 export default {
-	/**
-	 * Handles the fetch event by delegating to the request handler and formatting errors if they occur.
-	 * @param request - The incoming HTTP request.
-	 * @param env - Environment variables including the Telegram bot token.
-	 * @returns A Promise resolving to an HTTP Response.
-	 */
-	async fetch(request: Request, env: EnvInterface): Promise<Response> {
-		return await handleRequest(request, env).catch(formatErrorResponse);
+	async fetch(request: Request, env: TEnv): Promise<Response> {
+		ContainerConfig.initialize(env);
+		return await resolve(RequestHandler).handleRequest(request).catch(formatErrorResponse);
 	},
 };

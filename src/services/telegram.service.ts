@@ -1,11 +1,12 @@
 import { inject, injectable } from 'tsyringe';
+import type { TEnv } from '../interfaces/env.type';
 
 @injectable()
 export class TelegramService {
 	private readonly botApiUrl: string;
 
-	constructor(@inject('TELEGRAM_BOT_TOKEN') private botToken: string) {
-		this.botApiUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+	constructor(@inject('env') private env: TEnv) {
+		this.botApiUrl = `https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`;
 	}
 
 	async sendMessage(chatId: number, text: string): Promise<void> {
