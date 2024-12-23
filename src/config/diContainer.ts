@@ -1,15 +1,19 @@
 import { container } from 'tsyringe';
 import { TelegramService } from '../services/telegram.service';
 import { MessageHandler } from '../handlers/message.handler';
-import { EnvConfigInterface } from '../interfaces/envConfig.interface';
+import { IEnvConfig } from '../interfaces/IEnvConfig';
+import { CacheService } from '../services/cache.service';
+import { KVRepository } from '../repositories/kv.repository';
 
-export const configureContainer = (env: EnvConfigInterface): void => {
+export const configureContainer = (env: IEnvConfig): void => {
 	registerEnvVariables(env);
-	container.registerInstance(TelegramService, new TelegramService(env.TELEGRAM_BOT_TOKEN));
+	container.registerSingleton(KVRepository);
+	container.registerSingleton(CacheService);
+	container.registerSingleton(TelegramService);
 	container.registerSingleton(MessageHandler);
 };
 
-const registerEnvVariables = (env: EnvConfigInterface): void => {
+const registerEnvVariables = (env: IEnvConfig): void => {
 	Object.entries(env).forEach(([key, value]) => {
 		container.register(key, { useValue: value });
 	});
