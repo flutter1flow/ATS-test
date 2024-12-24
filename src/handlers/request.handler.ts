@@ -1,7 +1,7 @@
-import { inject, injectable } from 'tsyringe';
+import { inject, singleton } from 'tsyringe';
 import { MessageHandler } from './message.handler';
 
-@injectable()
+@singleton()
 export class RequestHandler {
 	constructor(@inject(MessageHandler) private readonly messageHandler: MessageHandler) {}
 
