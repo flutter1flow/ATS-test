@@ -1,7 +1,7 @@
-import { inject, injectable } from 'tsyringe';
+import { inject, singleton } from 'tsyringe';
 import type { TEnv } from '../types/env.type';
 
-@injectable()
+@singleton()
 export class TelegramService {
 	private readonly botApiUrl: string;
 

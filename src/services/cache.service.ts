@@ -1,7 +1,7 @@
 import { KVRepository } from '../repositories/kv.repository';
-import { inject, injectable } from 'tsyringe';
+import { inject, singleton } from 'tsyringe';
 
-@injectable()
+@singleton()
 export class CacheService {
 	constructor(@inject(KVRepository) private kvRepository: KVRepository) {}
 

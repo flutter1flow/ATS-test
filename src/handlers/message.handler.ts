@@ -1,8 +1,8 @@
-import { inject, injectable } from 'tsyringe';
+import { inject, singleton } from 'tsyringe';
 import { TelegramService } from '../services/telegram.service';
 import { ITelegramRequest } from '../interfaces/telegram.interface';
 
-@injectable()
+@singleton()
 export class MessageHandler {
 	constructor(@inject(TelegramService) private readonly telegramService: TelegramService) {}
 
