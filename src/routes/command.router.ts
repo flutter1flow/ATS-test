@@ -13,6 +13,7 @@ export class CommandRouter {
 
 	async handleCommand(request: Request): Promise<Response> {
 		const body: ITelegramRequest = await request.json();
+		console.log('Request:', body);
 		const command = await parseCommand(body);
 
 		const handler = this.handlers.get(command);
