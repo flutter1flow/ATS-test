@@ -1,17 +1,13 @@
 import 'reflect-metadata';
 import type { TEnv } from './types/env.type';
-import { RequestHandler } from './handlers/request.handler';
-import { formatErrorResponse } from './utils/error.util';
+import { ContainerConfig } from '@config/container.config';
 import { container } from 'tsyringe';
+import { CommandRouter } from '@routes/command.router';
+import { formatErrorResponse } from '@utils/error.util';
 
 export default {
 	async fetch(request: Request, env: TEnv): Promise<Response> {
-		container.registerInstance('env', env);
-		return await container.resolve(RequestHandler).handleRequest(request).catch(formatErrorResponse);
-	},
-
-	async scheduled(event: ScheduledEvent, env: TEnv): Promise<void> {
-		container.registerInstance('env', env);
-		// Do something
+		ContainerConfig.initialize(env);
+		return container.resolve(CommandRouter).handleCommand(request).catch(formatErrorResponse);
 	},
 };
