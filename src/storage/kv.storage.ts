@@ -2,7 +2,7 @@ import { inject, singleton } from 'tsyringe';
 import type { TEnv } from '../types/env.type';
 
 @singleton()
-export class KVRepository {
+export class KvStorage {
 	private kv: KVNamespace;
 
 	constructor(@inject('env') private env: TEnv) {

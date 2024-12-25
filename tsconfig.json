@@ -9,10 +9,12 @@
 			"@handlers/*": ["src/handlers/*"],
 			"@services/*": ["src/services/*"],
 			"@interfaces/*": ["src/interfaces/*"],
+			"@models/*": ["src/models/*"],
 			"@repositories/*": ["src/repositories/*"],
 			"@config/*": ["src/config/*"],
 			"@utils/*": ["src/utils/*"],
-			"@constants/*": ["src/constants/*"]
+			"@constants/*": ["src/constants/*"],
+			"@storage/*": ["src/storage/*"]
 		},
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
