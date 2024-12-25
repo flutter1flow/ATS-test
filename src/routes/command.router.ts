@@ -1,6 +1,7 @@
 import { injectAll, singleton } from 'tsyringe';
 import { ICommandHandler } from '@interfaces/handler.interface';
-import { parseCommand } from '@utils/command.util';
+import { parseCommand } from '@utils/telegram.util';
+import { ITelegramRequest } from '@interfaces/telegram.interface';
 
 @singleton()
 export class CommandRouter {
@@ -11,13 +12,14 @@ export class CommandRouter {
 	}
 
 	async handleCommand(request: Request): Promise<Response> {
-		const command = await parseCommand(request);
+		const body: ITelegramRequest = await request.json();
+		const command = await parseCommand(body);
 
 		const handler = this.handlers.get(command);
 		if (!handler) {
 			return new Response('Command not found', { status: 404 });
 		}
 
-		return handler.handle(request);
+		return handler.handle(body);
 	}
 }

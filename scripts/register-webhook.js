@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import fetch from 'node-fetch';
 
-dotenv.config();
+dotenv.config({ path: './.dev.vars' });
 
 const TELEGRAM_API_BASE = 'https://api.telegram.org/bot';
 
@@ -37,7 +37,7 @@ async function registerWebhook(token, workerUrl) {
 	const workerUrl = process.env.WORKER_URL;
 
 	if (!botToken || !workerUrl) {
-		console.error('TELEGRAM_BOT_TOKEN and WEBHOOK_URL must be set in the .env file.');
+		console.error('TELEGRAM_BOT_TOKEN and WEBHOOK_URL must be set in the .dev.vars file.');
 		process.exit(1);
 	}
 
