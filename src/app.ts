@@ -1,4 +1,4 @@
-// test1
+// test2
 import 'reflect-metadata';
 import type { TEnv } from './types/env.type';
 import { ContainerConfig } from '@config/container.config';
