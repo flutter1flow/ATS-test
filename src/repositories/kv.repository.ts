@@ -1,8 +1,13 @@
-import { inject, injectable } from 'tsyringe';
+import { inject, singleton } from 'tsyringe';
+import type { TEnv } from '../types/env.type';
 
-@injectable()
+@singleton()
 export class KVRepository {
-	constructor(@inject('KV_NAMESPACE') private kv: KVNamespace) {}
+	private kv: KVNamespace;
+
+	constructor(@inject('env') private env: TEnv) {
+		this.kv = env.KV_NAMESPACE;
+	}
 
 	async get<T>(key: string): Promise<T | null> {
 		const data = await this.kv.get(key, { type: 'json' });
