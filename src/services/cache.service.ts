@@ -1,15 +1,15 @@
 import { inject, singleton } from 'tsyringe';
-import { KVRepository } from '@repositories/kv.repository';
+import { KvStorage } from '@storage/kv.storage';
 
 @singleton()
 export class CacheService {
-	constructor(@inject(KVRepository) private kvRepository: KVRepository) {}
+	constructor(@inject(KvStorage) private kvStorage: KvStorage) {}
 
 	async getCachedResponse<T>(key: string): Promise<T | null> {
-		return this.kvRepository.get<T>(key);
+		return this.kvStorage.get<T>(key);
 	}
 
 	async cacheResponse<T>(key: string, value: T, ttl = 3600): Promise<void> {
-		await this.kvRepository.set(key, value, ttl);
+		await this.kvStorage.set(key, value, ttl);
 	}
 }
