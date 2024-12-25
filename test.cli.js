@@ -29,10 +29,6 @@ function getMessageFromUser(prompt) {
 			input: process.stdin,
 			output: process.stdout,
 		});
-		// colors e.g. chalk.blueBright, chalk.greenBright, chalk.yellow, chalk.red, chalk.whiteBright, chalk.gray, chalk.cyan, chalk.magenta, chalk.bgBlue, chalk.bgGreen, chalk.bgYellow, chalk.bgRed, chalk.bgWhiteBright
-		// chalk.bgCyan, chalk.bgMagenta, chalk.bgGray, chalk.bgBlack, chalk.bgHex('#FF0000'), chalk.hex('#FF0000')
-		// chalk.bgRgb(255, 0, 0), chalk.rgb(255, 0, 0), chalk.ansi(31), chalk.bgAnsi(31)
-		// chalk.bold, chalk.italic, chalk.underline, chalk.strikethrough, chalk.inverse, chalk.hidden, chalk.reset
 		rl.question(chalk.bold(chalk.bgGreenBright(prompt)) + ' ', (input) => {
 			rl.close();
 			resolve(input.trim());
