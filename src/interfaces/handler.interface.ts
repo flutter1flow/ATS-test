@@ -1,7 +1,9 @@
+import { ITelegramRequest } from '@interfaces/telegram.interface';
+
 export interface ICommandHandler {
 	command: string;
 
-	handle(request: Request): Response | Promise<Response>;
+	handle(request: ITelegramRequest): Response | Promise<Response>;
 }
 
 export abstract class CommandHandler implements ICommandHandler {
@@ -11,5 +13,5 @@ export abstract class CommandHandler implements ICommandHandler {
 		console.log('Logging:', context);
 	}
 
-	abstract handle(request: Request): Response | Promise<Response>;
+	abstract handle(request: ITelegramRequest): Response | Promise<Response>;
 }

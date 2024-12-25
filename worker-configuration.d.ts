@@ -2,9 +2,9 @@
 
 interface Env {
 	KV_NAMESPACE: KVNamespace;
-	WORKER_URL: 'https://ats-test.flutter1flow.workers.dev';
-	NODE_ENV: 'production';
 	TELEGRAM_BOT_TOKEN: string;
 	CHAT_ID: string;
+	WORKER_URL: string;
+	NODE_ENV: string;
 	DB: D1Database;
 }
