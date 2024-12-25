@@ -1,5 +1,5 @@
-import { KVRepository } from '../repositories/kv.repository';
 import { inject, singleton } from 'tsyringe';
+import { KVRepository } from '@repositories/kv.repository';
 
 @singleton()
 export class CacheService {
