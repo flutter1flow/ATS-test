@@ -46,6 +46,9 @@ Telegram bot for user interaction and leverages TypeScript for modular, scalable
 	  ```
 4. Test the project locally:
 
+- **For Testing Commands:**
+
+
 - Open first terminal and run:
    ```bash
    npm run dev
@@ -53,6 +56,18 @@ Telegram bot for user interaction and leverages TypeScript for modular, scalable
 - Open second terminal and run:
    ```bash
    npm run test:cli
+   ```
+
+- **For Testing Cron Job Scheduler:**
+
+
+- Open first terminal and run:
+   ```bash
+   npm run dev:cron
+   ```
+- Open second terminal and run:
+   ```bash
+   npm run test:cron
    ```
 
 ---

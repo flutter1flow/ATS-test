@@ -11,7 +11,7 @@ export class CommandRouter {
 		this.handlers = new Map(handlers.map((handler) => [handler.command, handler]));
 	}
 
-	async handleCommand(request: Request): Promise<Response> {
+	async route(request: Request): Promise<Response> {
 		const body: ITelegramRequest = await request.json();
 		console.log('Request:', body);
 		const command = await parseCommand(body);

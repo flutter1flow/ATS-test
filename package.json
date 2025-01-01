@@ -6,6 +6,7 @@
 	"scripts": {
 		"deploy": "node scripts/register-webhook.js & wrangler deploy",
 		"dev": "wrangler types & wrangler dev",
+		"dev:cron": "wrangler types & wrangler dev --test-scheduled",
 		"test": "vitest run --coverage --passWithNoTests",
 		"cf-typegen": "wrangler types",
 		"postbuild": "wrangler types",
@@ -15,6 +16,7 @@
 		"prettier:check": "prettier --check 'src/**/*.{js,ts,json,css,md}'",
 		"prettier:fix": "prettier --write 'src/**/*.{js,ts,json,css,md}'",
 		"test:cli": "node test.cli.js",
+		"test:cron": "curl \"http://localhost:8787/__scheduled?cron=*+*+*+*+*\"",
 		"tsc": "npx tsc --noEmit",
 		"test-local": "echo The command for testing the bot locally was changed to: 'npm run test:cli'"
 	},
