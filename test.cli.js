@@ -41,6 +41,7 @@ async function sendMockUpdate(message) {
 	const mockUpdate = {
 		message: {
 			chat: { id: chatId }, // Ensure chatId is a valid number
+			from: { id: chatId },
 			text: message,
 		},
 	};

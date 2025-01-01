@@ -1,15 +1,15 @@
 export interface ITelegramUser {
 	id: number;
 	username?: string;
-	firstName: string;
-	lastName?: string;
-	isBot: boolean;
-	languageCode?: string;
+	first_name: string;
+	last_name?: string;
+	is_bot: boolean;
+	language_code?: string;
 }
 
 export interface ITelegramChat {
 	id: number;
-	firstName?: string;
+	first_name?: string;
 	username?: string;
 	type: 'private' | 'group' | 'supergroup' | 'channel';
 }
@@ -21,7 +21,7 @@ export interface ITelegramMessageEntity {
 }
 
 export interface ITelegramMessageContent {
-	messageId: number;
+	message_id: number;
 	date: number;
 	chat: ITelegramChat;
 	from: ITelegramUser;
@@ -30,6 +30,6 @@ export interface ITelegramMessageContent {
 }
 
 export interface ITelegramRequest {
-	updateId: number;
+	update_id: number;
 	message: ITelegramMessageContent;
 }

@@ -1,22 +1,24 @@
 // src/models/user.model.ts
 
+import { ITelegramUser } from '@interfaces/telegram.interface';
+
 export interface User {
 	id: number;
 	username?: string;
-	firstName: string;
-	lastName?: string;
+	first_name: string;
+	last_name?: string;
 }
 
 export class UserModel implements User {
 	id: number;
 	username?: string;
-	firstName: string;
-	lastName?: string;
+	first_name: string;
+	last_name?: string;
 
-	constructor(user: User) {
-		this.id = user.id;
-		this.username = user.username;
-		this.firstName = user.firstName;
-		this.lastName = user.lastName;
+	constructor(from: ITelegramUser) {
+		this.id = from.id;
+		this.username = from?.username;
+		this.first_name = from.first_name;
+		this.last_name = from?.last_name;
 	}
 }
