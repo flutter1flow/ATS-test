@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
-
-const BOT_COMMANDS = [{ command: 'start', description: 'تسجيل' }];
+import { BOT_COMMANDS } from '../src/config/menu.config.js';
 
 if (process.env.NODE_ENV !== 'build') {
 	dotenv.config({ path: './.dev.vars' });
