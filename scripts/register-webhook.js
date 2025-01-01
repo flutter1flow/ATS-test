@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 
-// dotenv.config({ path: './.dev.vars' });
+dotenv.config({ path: './.dev.vars' });
 
 const TELEGRAM_API_BASE = 'https://api.telegram.org/bot';
 
