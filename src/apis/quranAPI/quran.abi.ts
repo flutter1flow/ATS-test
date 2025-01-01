@@ -8,7 +8,7 @@ export class QuranAbi {
 
 	/**
 	 *
-	 * @param ayah : ex. "2:255","262" Ayat Al Kursi
+	 * @param ayah : ex. "2:255","262"  Ayat Al Kursi
 	 * @return AyahClass
 	 */
 	public getAyah = async (ayah:string):Promise<AyahClass|null> => {
