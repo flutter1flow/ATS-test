@@ -1,12 +1,10 @@
-import dotenv from 'dotenv';
-
 const BOT_COMMANDS = [{ command: 'start', description: 'تسجيل' }];
 
 if (process.env.NODE_ENV !== 'build') {
 	dotenv.config({ path: './.dev.vars' });
 }
 
-const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const BOT_TOKEN = '7241318250:AAF6OYmuniITN2DMEdRfmwtLyPz2WbHTjyE';
 
 if (!BOT_TOKEN) {
 	console.error('Error: BOT_TOKEN is not set in the environment.');
