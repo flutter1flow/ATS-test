@@ -1,13 +1,13 @@
 import { inject, singleton } from 'tsyringe';
 import { CommandHandler } from '@interfaces/handler.interface';
+import { parseChatId } from '@utils/telegram.util';
 import { TelegramService } from '@services/telegram.service';
 import { ITelegramRequest } from '@interfaces/telegram.interface';
 import { UserRepository } from '@repositories/user.repository';
-import { UserModel } from '@models/user.model';
 
 @singleton()
-export class StartCommand extends CommandHandler {
-	command = '/start';
+export class AllUsersCommand extends CommandHandler {
+	command = '/allUsers';
 
 	constructor(
 		@inject(TelegramService) private telegramService: TelegramService,
@@ -18,9 +18,10 @@ export class StartCommand extends CommandHandler {
 
 	async handle(request: ITelegramRequest): Promise<Response> {
 		await this.log(request);
-		const user = new UserModel(request.message.from);
-		await this.userRepository.saveUser(user);
-		await this.telegramService.sendMessage(user.id, 'Start Command');
-		return new Response('Start Command', { status: 200 });
+		const chatId = await parseChatId(request);
+		const users = await this.userRepository.getAllUsers();
+		const msg = users.map((user) => user.key).join('\n');
+		await this.telegramService.sendMessage(chatId, msg);
+		return new Response(msg, { status: 200 });
 	}
 }
