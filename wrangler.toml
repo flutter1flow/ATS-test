@@ -27,6 +27,13 @@ TELEGRAM_BOT_TOKEN = "7241318250:AAF6OYmuniITN2DMEdRfmwtLyPz2WbHTjyE"
 WORKER_URL = "https://ats-test.flutter1flow.workers.dev"
 NODE_ENV = "production"
 
+[triggers]
+crons = [
+  "0 * * * *",    # Hourly
+  "30 0 * * *",   # Daily at 12:30 AM
+  "15 9 * * 1-5"  # Weekdays at 9:15 AM
+]
+
 # Bind the Workers AI model catalog. Run machine learning models, powered by serverless GPUs, on Cloudflare’s global network
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#workers-ai
 # [ai]

@@ -6,7 +6,8 @@
 		"paths": {
 			"@middlewares/*": ["src/middlewares/*"],
 			"@routes/*": ["src/routes/*"],
-			"@handlers/*": ["src/handlers/*"],
+			"@commands/*": ["src/commands/*"],
+			"@jobs/*": ["src/jobs/*"],
 			"@services/*": ["src/services/*"],
 			"@interfaces/*": ["src/interfaces/*"],
 			"@models/*": ["src/models/*"],

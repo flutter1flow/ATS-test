@@ -1,12 +1,12 @@
 import { inject, singleton } from 'tsyringe';
 import { CommandHandler } from '@interfaces/handler.interface';
-import { TelegramService } from '@services/telegram.service';
 import { parseChatId } from '@utils/telegram.util';
+import { TelegramService } from '@services/telegram.service';
 import { ITelegramRequest } from '@interfaces/telegram.interface';
 
 @singleton()
-export class StartHandler extends CommandHandler {
-	command = '/start';
+export class HelpCommand extends CommandHandler {
+	command = '/help';
 
 	constructor(@inject(TelegramService) private telegramService: TelegramService) {
 		super();
@@ -15,7 +15,7 @@ export class StartHandler extends CommandHandler {
 	async handle(request: ITelegramRequest): Promise<Response> {
 		await this.log(request);
 		const chatId = await parseChatId(request);
-		const msg = 'Start Command';
+		const msg = 'Help Command';
 		await this.telegramService.sendMessage(chatId, msg);
 		return new Response(msg, { status: 200 });
 	}
