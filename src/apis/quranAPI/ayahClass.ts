@@ -52,7 +52,7 @@ export class AyahClass {
 		return _listOfStrings.slice(0,number).join(" ");
 	}
 
-	// TODO : get Next Ayah ????
+	// TODO : get Next Ayah ???
 	// TODO : get Next N Ayahs ??
 
 }
