@@ -2,11 +2,7 @@ import dotenv from 'dotenv';
 
 const BOT_COMMANDS = [{ command: 'start', description: 'تسجيل' }];
 
-if (process.env.NODE_ENV !== 'production') {
-	dotenv.config({ path: './.dev.vars' });
-} else {
-	dotenv.config();
-}
+dotenv.config({ path: './.dev.vars' });
 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 
