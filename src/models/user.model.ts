@@ -2,14 +2,14 @@
 
 import { ITelegramUser } from '@interfaces/telegram.interface';
 
-export interface User {
+export interface IUser {
 	id: number;
 	username?: string;
 	first_name: string;
 	last_name?: string;
 }
 
-export class UserModel implements User {
+export class User implements IUser {
 	id: number;
 	username?: string;
 	first_name: string;

@@ -33,3 +33,8 @@ export interface ITelegramRequest {
 	update_id: number;
 	message: ITelegramMessageContent;
 }
+
+export interface InlineButton {
+	text: string;
+	callback_data: string;
+}

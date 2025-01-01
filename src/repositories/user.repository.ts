@@ -1,6 +1,6 @@
 import { inject, singleton } from 'tsyringe';
-import { User } from '@models/user.model';
-import { KVPair, KvStorage } from '@storage/kv.storage';
+import { IUser } from '@models/user.model';
+import { KvStorage } from '@storage/kv.storage';
 
 @singleton()
 export class UserRepository {
@@ -8,18 +8,19 @@ export class UserRepository {
 
 	constructor(@inject(KvStorage) private kvStorage: KvStorage) {}
 
-	async saveUser(user: User): Promise<void> {
+	async save(user: IUser): Promise<void> {
 		const key = this.getUserKey(user.id);
-		await this.kvStorage.set<User>(key, user);
+		await this.kvStorage.set<IUser>(key, user);
 	}
 
-	async getUser(userId: number): Promise<User | null> {
+	async get(userId: number): Promise<IUser | null> {
 		const key = this.getUserKey(userId);
-		return await this.kvStorage.get<User>(key);
+		return await this.kvStorage.get<IUser>(key);
 	}
 
-	async getAllUsers(): Promise<KVPair<User>[]> {
-		return await this.kvStorage.listWithPrefix<User>(this.userKeyPrefix);
+	async getIds(): Promise<number[]> {
+		const users = await this.kvStorage.listWithPrefix<IUser>(this.userKeyPrefix);
+		return users.map((user) => user.value.id);
 	}
 
 	private getUserKey(userId: number): string {

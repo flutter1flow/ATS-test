@@ -1,7 +1,7 @@
 import { container } from 'tsyringe';
 import { HelpCommand } from '@commands/help.command';
 import { StartCommand } from '@commands/start.command';
-import { TableJob } from '@jobs/table.job';
+import { CalendarJob } from '@jobs/calendar.job';
 import { AllUsersCommand } from '@commands/allUsers.command';
 
 export class ContainerConfig {
@@ -12,6 +12,6 @@ export class ContainerConfig {
 		container.registerSingleton('ICommandHandler', AllUsersCommand);
 
 		console.log('Registering Job Handlers');
-		container.registerSingleton('IJobHandler', TableJob);
+		container.registerSingleton('IJobHandler', CalendarJob);
 	}
 }

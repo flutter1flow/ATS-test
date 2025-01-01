@@ -19,8 +19,8 @@ export class AllUsersCommand extends CommandHandler {
 	async handle(request: ITelegramRequest): Promise<Response> {
 		await this.log(request);
 		const chatId = await parseChatId(request);
-		const users = await this.userRepository.getAllUsers();
-		const msg = users.map((user) => user.key).join('\n');
+		const users = await this.userRepository.getIds();
+		const msg = users.join('\n');
 		await this.telegramService.sendMessage(chatId, msg);
 		return new Response(msg, { status: 200 });
 	}
