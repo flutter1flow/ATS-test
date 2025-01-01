@@ -1,8 +1,10 @@
 const BOT_COMMANDS = [{ command: 'start', description: 'تسجيل' }];
 
-// if (process.env.NODE_ENV !== 'production') {
-// 	dotenv.config({ path: './.dev.vars' });
-// }
+if (process.env.NODE_ENV !== 'production') {
+	dotenv.config({ path: './.dev.vars' });
+} else {
+	dotenv.config();
+}
 
 const BOT_TOKEN = '7241318250:AAF6OYmuniITN2DMEdRfmwtLyPz2WbHTjyE';
 
