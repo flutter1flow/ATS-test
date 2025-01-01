@@ -26,8 +26,6 @@ export class KvStorage {
 
 	async listWithPrefix<T>(prefix: string): Promise<KVPair<T>[]> {
 		const { keys } = await this.kv.list({ prefix });
-
-		// Resolve all key-value pairs with explicit type inference
 		const pairs = await Promise.all(
 			keys.map(async ({ name }) => {
 				const value = await this.get<T>(name);
@@ -39,8 +37,6 @@ export class KvStorage {
 					: null;
 			})
 		);
-
-		// Use a stricter type predicate with `NonNullable`
 		return pairs.filter((pair): pair is KVPair<T> => pair !== null);
 	}
 }
