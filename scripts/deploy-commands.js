@@ -1,5 +1,3 @@
-import dotenv from 'dotenv';
-
 const BOT_COMMANDS = [{ command: 'start', description: 'تسجيل' }];
 
 dotenv.config({ path: './.dev.vars' });
