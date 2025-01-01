@@ -1,0 +1,5 @@
+export const SLOT_TIMING = {
+	START_TIME: '10:00',
+	END_TIME: '21:00',
+	INTERVAL_MINUTES: 30,
+};
