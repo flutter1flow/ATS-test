@@ -4,7 +4,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"deploy": "node scripts/register-webhook.js & wrangler deploy & run npm deploy:commands",
+		"deploy": "node scripts/register-webhook.js & wrangler deploy & npm run deploy:commands",
 		"dev": "wrangler types & wrangler dev",
 		"dev:cron": "wrangler types & wrangler dev --test-scheduled",
 		"test": "vitest run --coverage --passWithNoTests",

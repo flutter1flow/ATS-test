@@ -1,5 +1,5 @@
-import dotenv from 'dotenv';
 import fetch from 'node-fetch';
+import dotenv from 'dotenv';
 
 dotenv.config({ path: './.dev.vars' });
 
