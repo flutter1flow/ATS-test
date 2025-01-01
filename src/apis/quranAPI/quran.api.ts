@@ -1,6 +1,6 @@
 import { AyahClass } from './ayahClass';
 
-export class QuranAbi {
+export class QuranApi {
 	/*
 	!!!! we are using these API link : => https://alquran.cloud/api  <=!!!!!
 	 */
