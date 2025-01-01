@@ -4,7 +4,7 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"deploy": "node scripts/register-webhook.js & wrangler deploy & npm run deploy:commands",
+		"deploy": "npm run deploy:webhook & wrangler deploy & npm run deploy:commands",
 		"dev": "wrangler types & wrangler dev",
 		"dev:cron": "wrangler types & wrangler dev --test-scheduled",
 		"test": "vitest run --coverage --passWithNoTests",
@@ -19,6 +19,7 @@
 		"test:cron": "curl \"http://localhost:8787/__scheduled?cron=*+*+*+*+*\"",
 		"tsc": "npx tsc --noEmit",
 		"deploy:commands": "node scripts/deploy-commands.js",
+		"deploy:webhook": "node scripts/register-webhook.js",
 		"test-local": "echo The command for testing the bot locally was changed to: 'npm run test:cli'"
 	},
 	"devDependencies": {
