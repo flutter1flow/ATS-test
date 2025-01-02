@@ -1,38 +1,44 @@
 import { inject, singleton } from 'tsyringe';
 import { SlotRepository } from '@repositories/slot.repository';
 import { SLOT_TIMING } from '@constants/slot.constants';
-import { ISlot } from '@models/slot.model';
+import { ISlot, Slot } from '@models/slot.model';
+import { getDate } from '@utils/date.util';
 
 @singleton()
 export class SlotService {
 	constructor(@inject(SlotRepository) private slotRepository: SlotRepository) {}
 
-	async generateSlots(): Promise<void> {
-		const date = this.getCurrentDate();
+	async getSlots(): Promise<ISlot[]> {
 		const times = this.generateTimes(SLOT_TIMING.START_TIME, SLOT_TIMING.END_TIME, SLOT_TIMING.INTERVAL_MINUTES);
-		await Promise.all(times.map((time) => this.slotRepository.save(date, time, [])));
+		return Promise.all(times.map((time) => this.createSlot(time)));
 	}
 
-	async getSlots(): Promise<ISlot[]> {
-		const date = this.getCurrentDate();
-		return await this.slotRepository.getAll(date);
+	async changeUserState(time: string, userId: number): Promise<void> {
+		const slot = await this.createSlot(time);
+		if (slot && slot.users.includes(userId)) {
+			await this.slotRepository.deleteUser(time, userId);
+		} else {
+			await this.slotRepository.addUser(time, userId);
+		}
+	}
+
+	private async createSlot(time: string): Promise<ISlot> {
+		const existingSlot = await this.slotRepository.get(time);
+		if (existingSlot) return existingSlot;
+		const newSlot = new Slot(getDate(), time);
+		await this.slotRepository.create(time);
+		return newSlot;
 	}
 
 	private generateTimes(startTime: string, endTime: string, intervalMinutes: number): string[] {
 		const times: string[] = [];
 		let currentTime = this.parseTime(startTime);
 		const endTimeMinutes = this.timeToMinutes(endTime);
-
 		while (this.timeToMinutes(currentTime) < endTimeMinutes) {
 			times.push(currentTime);
 			currentTime = this.incrementTime(currentTime, intervalMinutes);
 		}
-
 		return times;
-	}
-
-	private getCurrentDate(): string {
-		return new Date().toISOString().split('T')[0];
 	}
 
 	private timeToMinutes(time: string): number {

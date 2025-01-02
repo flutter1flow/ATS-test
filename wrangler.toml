@@ -29,7 +29,7 @@ NODE_ENV = "production"
 
 [triggers]
 crons = [
-  "12 19 * * *",					# Daily at 8:30 AM
+  "30 6 * * *",					# Daily at 8:30 AM
   "20,29,50,59 7-18 * * *"		# Daily At 20, 29, 50, and 59 minutes past the hour, every hour from 9 AM to 8 PM
 ]
 

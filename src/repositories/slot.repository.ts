@@ -1,32 +1,34 @@
 import { inject, singleton } from 'tsyringe';
-import { ISlot } from '@models/slot.model';
+import { ISlot, Slot } from '@models/slot.model';
 import { KvStorage } from '@storage/kv.storage';
+import { getDate } from '@utils/date.util';
 
 @singleton()
 export class SlotRepository {
-	private readonly slotKeyPrefix = 'slot:';
+	private readonly date = getDate();
+	private readonly slotKeyPrefix = `slot:${this.date}:`;
 
 	constructor(@inject(KvStorage) private kvStorage: KvStorage) {}
 
-	async save(date: string, time: string, users: number[]): Promise<void> {
-		const key = this.getSlotKey(date, time);
-		const slot: ISlot = { date, time, users };
+	async create(time: string): Promise<void> {
+		const key = this.getSlotKey(time);
+		const slot = new Slot(this.date, time);
 		await this.kvStorage.set<ISlot>(key, slot);
 	}
 
-	async get(date: string, time: string): Promise<ISlot | null> {
-		const key = this.getSlotKey(date, time);
+	async get(time: string): Promise<ISlot | null> {
+		const key = this.getSlotKey(time);
 		return await this.kvStorage.get<ISlot>(key);
 	}
 
-	async getAll(date: string): Promise<ISlot[]> {
-		const prefix = this.getSlotDatePrefix(date);
+	async getAll(): Promise<ISlot[]> {
+		const prefix = this.slotKeyPrefix;
 		const slots = await this.kvStorage.listWithPrefix<ISlot>(prefix);
 		return slots.map(({ value }) => value);
 	}
 
-	async deleteUser(date: string, time: string, userId: number): Promise<void> {
-		const key = this.getSlotKey(date, time);
+	async deleteUser(time: string, userId: number): Promise<void> {
+		const key = this.getSlotKey(time);
 		const slot = await this.kvStorage.get<ISlot>(key);
 		if (slot === null) {
 			return;
@@ -36,22 +38,18 @@ export class SlotRepository {
 		await this.kvStorage.set<ISlot>(key, slot);
 	}
 
-	async addUser(date: string, time: string, userId: number): Promise<void> {
-		const key = this.getSlotKey(date, time);
-		const slot = await this.kvStorage.get<ISlot>(key);
+	async addUser(time: string, userId: number): Promise<void> {
+		const key = this.getSlotKey(time);
+		let slot = await this.kvStorage.get<ISlot>(key);
 		if (slot === null) {
-			return;
+			slot = new Slot(this.date, time);
 		}
 
 		slot.users.push(userId);
 		await this.kvStorage.set<ISlot>(key, slot);
 	}
 
-	private getSlotKey(date: string, time: string): string {
-		return `${this.slotKeyPrefix}${date}:${time}`;
-	}
-
-	private getSlotDatePrefix(date: string): string {
-		return `${this.slotKeyPrefix}${date}:`;
+	private getSlotKey(time: string): string {
+		return `${this.slotKeyPrefix}${time}`;
 	}
 }

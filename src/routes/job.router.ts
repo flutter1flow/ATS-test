@@ -12,7 +12,7 @@ export class JobRouter {
 	async route(event: ScheduledEvent): Promise<void> {
 		console.log('Executing JobRouter');
 		const eventTime = new Date(event.scheduledTime);
-		const eventHour = eventTime.getHours();
+		const eventHour = eventTime.getHours() + 2;
 		const eventMinute = eventTime.getMinutes();
 
 		const jobsToRun = this.handlers

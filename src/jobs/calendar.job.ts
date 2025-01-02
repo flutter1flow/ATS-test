@@ -12,12 +12,12 @@ export class CalendarJob implements JobHandler {
 
 	shouldRun(hour: number, minute: number): boolean {
 		console.log('Checking CalendarHandler:', hour, minute);
+		// return hour === 8 && minute > 28 && minute < 32;
 		return true;
 	}
 
 	async handle(hour: number, minute: number): Promise<void> {
 		console.log('Executing CalendarHandler:', hour, minute);
-		await this.calendarService.generateSlots();
-		await this.calendarService.notifyUsers();
+		await this.calendarService.sendCalendarAllUsers();
 	}
 }

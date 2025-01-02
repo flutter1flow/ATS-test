@@ -1,11 +1,11 @@
-import { ITelegramRequest } from '@interfaces/telegram.interface';
+import { ICommand } from '@interfaces/command.interface';
 
 // Command Handler Interface
 
 export interface ICommandHandler {
 	command: string;
 
-	handle(request: ITelegramRequest): Response | Promise<Response>;
+	handle(command: ICommand): Response | Promise<Response>;
 }
 
 export abstract class CommandHandler implements ICommandHandler {
@@ -15,7 +15,7 @@ export abstract class CommandHandler implements ICommandHandler {
 		console.log('Logging:', context);
 	}
 
-	abstract handle(request: ITelegramRequest): Response | Promise<Response>;
+	abstract handle(command: ICommand): Response | Promise<Response>;
 }
 
 // Job Handler Interface
