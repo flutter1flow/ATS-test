@@ -29,12 +29,26 @@ export interface ITelegramMessageContent {
 	entities?: ITelegramMessageEntity[];
 }
 
+export interface ITelegramCallbackQuery {
+	id: string;
+	from: ITelegramUser;
+	message: ITelegramMessageContent;
+	data: string;
+}
+
 export interface ITelegramRequest {
 	update_id: number;
 	message: ITelegramMessageContent;
+	callback_query?: ITelegramCallbackQuery;
 }
 
 export interface InlineButton {
 	text: string;
 	callback_data: string;
+}
+
+export interface ITelegramResponse {
+	ok: boolean;
+	result: { message_id: number };
+	description?: string;
 }

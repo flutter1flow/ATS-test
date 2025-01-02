@@ -1,9 +1,8 @@
 import { inject, singleton } from 'tsyringe';
 import { CommandHandler } from '@interfaces/handler.interface';
-import { parseChatId } from '@utils/telegram.util';
 import { TelegramService } from '@services/telegram.service';
-import { ITelegramRequest } from '@interfaces/telegram.interface';
 import { UserRepository } from '@repositories/user.repository';
+import { ICommand } from '@interfaces/command.interface';
 
 @singleton()
 export class AllUsersCommand extends CommandHandler {
@@ -16,12 +15,11 @@ export class AllUsersCommand extends CommandHandler {
 		super();
 	}
 
-	async handle(request: ITelegramRequest): Promise<Response> {
-		await this.log(request);
-		const chatId = await parseChatId(request);
+	async handle(command: ICommand): Promise<Response> {
+		await this.log(command.request);
 		const users = await this.userRepository.getIds();
 		const msg = users.join('\n');
-		await this.telegramService.sendMessage(chatId, msg);
+		await this.telegramService.sendOrUpdateMessage(command.chatId, msg);
 		return new Response(msg, { status: 200 });
 	}
 }

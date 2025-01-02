@@ -4,37 +4,44 @@ import { TelegramService } from '@services/telegram.service';
 import { Slot } from '@models/slot.model';
 import { InlineButton } from '@interfaces/telegram.interface';
 import { UserRepository } from '@repositories/user.repository';
+import { getGregorianDate, getHijriDate } from '@utils/date.util';
+import { CalendarMessageRepository } from '@repositories/calendar.repository';
 
 @singleton()
 export class CalendarService {
 	constructor(
 		@inject(UserRepository) private userRepository: UserRepository,
 		@inject(SlotService) private slotService: SlotService,
+		@inject(CalendarMessageRepository) private cMRepository: CalendarMessageRepository,
 		@inject(TelegramService) private telegramService: TelegramService
 	) {}
 
-	async generateSlots(): Promise<void> {
-		await this.slotService.generateSlots();
-	}
-
-	async notifyUsers(): Promise<void> {
+	async sendCalendarAllUsers(): Promise<void> {
 		const slots = await this.slotService.getSlots();
 		const users = await this.userRepository.getIds();
-
 		await Promise.all(
 			users.map(async (userId) => {
-				const calendar = this.buildCalendar(userId, slots);
-				await this.telegramService.sendMessage(
-					userId,
-					'١ يناير ٢٠٢٥  [ ٢ رجب ١٤٤٦ هـ ] \n\n 📜 1535: حَدَّثَنَا مُحَمَّدُ بْنُ أَبِي بَكْرٍ، حَدَّثَنَا فُضَيْلُ بْنُ سُلَيْمَانَ، حَدَّثَنَا مُوسَى بْنُ عُقْبَةَ، قَالَ حَدَّثَنِي سَالِمُ بْنُ عَبْدِ اللَّهِ، عَنْ أَبِيهِ ـ رضى الله عنه ـ عَنِ النَّبِيِّ صلى الله عليه وسلم أَنَّهُ رُئِيَ وَهُوَ فِي مُعَرَّسٍ بِذِي الْحُلَيْفَةِ بِبَطْنِ الْوَادِي قِيلَ لَهُ إِنَّكَ بِبَطْحَاءَ مُبَارَكَةٍ‏.‏ وَقَدْ أَنَاخَ بِنَا سَالِمٌ، يَتَوَخَّى بِالْمُنَاخِ الَّذِي كَانَ عَبْدُ اللَّهِ يُنِيخُ، يَتَحَرَّى مُعَرَّسَ رَسُولِ اللَّهِ صلى الله عليه وسلم وَهُوَ أَسْفَلُ مِنَ الْمَسْجِدِ الَّذِي بِبَطْنِ الْوَادِي، بَيْنَهُمْ وَبَيْنَ الطَّرِيقِ وَسَطٌ مِنْ ذَلِكَ‏.‏\n' +
-						'📚 (صحيح البخاري - 25: الحج (الحج)) \n\n من فضلك قم باختيار الأوقات التي تكون فيها متاحا',
-					calendar
-				);
+				const calendarMessage = await this.cMRepository.get(userId);
+				const messageId = calendarMessage?.messageId || undefined;
+				console.log('Sending calendar to user:', userId, messageId);
+				await this.sendCalendarMessage(userId, slots, messageId);
 			})
 		);
 	}
 
-	buildCalendar(userId: number, slots: Slot[]): InlineButton[][] {
+	private async sendCalendarMessage(userId: number, slots: Slot[], messageId: number | undefined): Promise<void> {
+		const calendar = this.buildCalendar(userId, slots);
+		try {
+			const text = messageId ? undefined : this.getCalendarTextMessage();
+			const response = await this.telegramService.sendOrUpdateMessage(userId, text, calendar, messageId);
+			console.log('Calendar sent to user:', userId, response.result.message_id);
+			await this.cMRepository.save(userId, response.result.message_id);
+		} catch (error) {
+			console.error('Failed to send calendar to user:', userId, error);
+		}
+	}
+
+	private buildCalendar(userId: number, slots: Slot[]): InlineButton[][] {
 		const maxTextLength = Math.max(...slots.map((slot) => slot.time.length + 4));
 
 		return slots.reduce((rows, slot, index) => {
@@ -47,8 +54,16 @@ export class CalendarService {
 			const baseText = `${slot.time} ${icons}`.trim();
 			const paddedText = baseText.padEnd(maxTextLength, ' ');
 
-			rows[rows.length - 1].push(TelegramService.createInlineButton(paddedText, slot.time));
+			rows[rows.length - 1].push(TelegramService.createInlineButton(paddedText, `/clickSlot ${slot.time}`));
 			return rows;
 		}, [] as InlineButton[][]);
+	}
+
+	private getCalendarTextMessage(): string {
+		const date = `${getGregorianDate()}  [ ${getHijriDate()} ]`;
+		const hadith =
+			'📜 عن أنس بن مالك رضي الله عنه قال: قال رسول الله صلى الله عليه وسلم: (( إنَّ للَّهِ أَهْلينَ منَ النَّاسِ قالوا: يا رسولَ اللَّهِ ، من هُم ؟ قالَ: هم أَهْلُ القرآنِ ، أَهْلُ اللَّهِ وخاصَّتُهُ . )) - 📚 حديث صحيح';
+		const please = 'من فضلك قم باختيار الأوقات التي تكون فيها متاحا';
+		return `${date}\n\n${hadith}\n\n${please}`;
 	}
 }
